@@ -1,0 +1,1317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>BBJ接口测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 0.9.1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.common.min.js"></script>
+    <!-- <script type="text/javascript" src="js/echarts.common.min.js"></script> -->
+    
+<style type="text/css" media="screen">
+    body        { font-family: Microsoft YaHei,Consolas,arial,sans-serif; font-size: 80%; }
+    table       { font-size: 100%; }
+    pre         { white-space: pre-wrap;word-wrap: break-word; }
+    /* -- heading ---------------------------------------------------------------------- */
+    h1 {
+        font-size: 16pt;
+        color: gray;
+    }
+    .heading {
+        margin-top: 0ex;
+        margin-bottom: 1ex;
+    }
+    .heading .attribute {
+        margin-top: 1ex;
+        margin-bottom: 0;
+    }
+    .heading .description {
+        margin-top: 2ex;
+        margin-bottom: 3ex;
+    }
+    /* -- css div popup ------------------------------------------------------------------------ */
+    a.popup_link {
+    }
+    a.popup_link:hover {
+        color: red;
+    }
+    .popup_window {
+        display: none;
+        position: relative;
+        left: 0px;
+        top: 0px;
+        /*border: solid #627173 1px; */
+        padding: 10px;
+        /*background-color: #E6E6D6; */
+        font-family: "Lucida Console", "Courier New", Courier, monospace;
+        text-align: left;
+        font-size: 8pt;
+        /* width: 500px;*/
+    }
+    }
+    /* -- report ------------------------------------------------------------------------ */
+    #show_detail_line {
+        margin-top: 3ex;
+        margin-bottom: 1ex;
+    }
+    #result_table {
+        width: 99%;
+    }
+    #header_row {
+        font-weight: bold;
+        color: #303641;
+        background-color: #ebebeb;
+    }
+    #total_row  { font-weight: bold; }
+    .passClass  { background-color: #bdedbc; }
+    .failClass  { background-color: #ffefa4; }
+    .errorClass { background-color: #ffc9c9; }
+    .passCase   { color: #6c6; }
+    .failCase   { color: #FF6600; font-weight: bold; }
+    .errorCase  { color: #c00; font-weight: bold; }
+    .hiddenRow  { display: none; }
+    .testcase   { margin-left: 2em; }
+    /* -- ending ---------------------------------------------------------------------- */
+    #ending {
+    }
+    #div_base {
+                position:absolute;
+                top:0%;
+                left:5%;
+                right:5%;
+                width: auto;
+                height: auto;
+                margin: -15px 0 0 0;
+    }
+</style>
+
+</head>
+<body>
+    <script language="javascript" type="text/javascript"><!--
+    output_list = Array();
+    /* level - 0:Summary; 1:Failed; 2:All */
+    function showCase(level) {
+        trs = document.getElementsByTagName("tr");
+        for (var i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            id = tr.id;
+            if (id.substr(0,2) == 'ft') {
+                if (level < 1) {
+                    tr.className = 'hiddenRow';
+                }
+                else {
+                    tr.className = '';
+                }
+            }
+            if (id.substr(0,2) == 'pt') {
+                if (level > 1) {
+                    tr.className = '';
+                }
+                else {
+                    tr.className = 'hiddenRow';
+                }
+            }
+        }
+    }
+    function showClassDetail(cid, count) {
+        var id_list = Array(count);
+        var toHide = 1;
+        for (var i = 0; i < count; i++) {
+            tid0 = 't' + cid.substr(1) + '.' + (i+1);
+            tid = 'f' + tid0;
+            tr = document.getElementById(tid);
+            if (!tr) {
+                tid = 'p' + tid0;
+                tr = document.getElementById(tid);
+            }
+            id_list[i] = tid;
+            if (tr.className) {
+                toHide = 0;
+            }
+        }
+        for (var i = 0; i < count; i++) {
+            tid = id_list[i];
+            if (toHide) {
+                document.getElementById('div_'+tid).style.display = 'none'
+                document.getElementById(tid).className = 'hiddenRow';
+            }
+            else {
+                document.getElementById(tid).className = '';
+            }
+        }
+    }
+    function showTestDetail(div_id){
+        var details_div = document.getElementById(div_id)
+        var displayState = details_div.style.display
+        // alert(displayState)
+        if (displayState != 'block' ) {
+            displayState = 'block'
+            details_div.style.display = 'block'
+        }
+        else {
+            details_div.style.display = 'none'
+        }
+    }
+    function html_escape(s) {
+        s = s.replace(/&/g,'&amp;');
+        s = s.replace(/</g,'&lt;');
+        s = s.replace(/>/g,'&gt;');
+        return s;
+    }
+    /* obsoleted by detail in <div>
+    function showOutput(id, name) {
+        var w = window.open("", //url
+                        name,
+                        "resizable,scrollbars,status,width=800,height=450");
+        d = w.document;
+        d.write("<pre>");
+        d.write(html_escape(output_list[id]));
+        d.write("\n");
+        d.write("<a href='javascript:window.close()'>close</a>\n");
+        d.write("</pre>\n");
+        d.close();
+    }
+    */
+    --></script>
+    <div id="div_base">
+        
+    <div class='page-header'>
+        <h1>BBJ接口测试报告</h1>
+    <p class='attribute'><strong>开始时间:</strong> 2020-06-08 17:30:31</p>
+<p class='attribute'><strong>运行时长:</strong> 0:01:26.472712</p>
+<p class='attribute'><strong>状态:</strong> 通过 18 错误 9</p>
+
+    </div>
+    <div style="float: left;width:50%;"><p class='description'>BBJ接口测试结果</p></div>
+    <div id="chart" style="width:50%;height:400px;float:left;"></div>
+
+        
+    <div class="btn-group btn-group-sm">
+        <button class="btn btn-default" onclick='javascript:showCase(0)'>总结</button>
+        <button class="btn btn-default" onclick='javascript:showCase(1)'>失败</button>
+        <button class="btn btn-default" onclick='javascript:showCase(2)'>全部</button>
+    </div>
+    <p></p>
+    <table id='result_table' class="table table-bordered">
+        <colgroup>
+            <col align='left' />
+            <col align='right' />
+            <col align='right' />
+            <col align='right' />
+            <col align='right' />
+            <col align='right' />
+        </colgroup>
+        <tr id='header_row'>
+            <td>测试套件/测试用例</td>
+            <td>总数</td>
+            <td>通过</td>
+            <td>失败</td>
+            <td>错误</td>
+            <td>查看</td>
+        </tr>
+        
+    <tr class='passClass'>
+        <td>test_1.Test_Login</td>
+        <td>1</td>
+        <td>1</td>
+        <td>0</td>
+        <td>0</td>
+        <td><a href="javascript:showClassDetail('c1',1)">详情</a></td>
+    </tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_shuj</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        通过</a>
+    <div id='div_pt1.1' class="popup_window">
+        <pre>pt1.1: 参数 {'mobile':'13918486417','code':'3456'}
+**************************************************
+13918486417
+text https://uat-mapi.deepcoin.pro/site/new-login
+H/TUjsazDmjEDXqXxmMvM++WKBKDqW+S733hfFybjnv6aOT9wUpK13GjzCM/prXZaXUQFe6ZgtVRRy7JN4X+Sg==
+{'Content-Type': 'application/x-www-form-urlencoded', 'token': 'H/TUjsazDmjEDXqXxmMvM++WKBKDqW+S733hfFybjnv6aOT9wUpK13GjzCM/prXZaXUQFe6ZgtVRRy7JN4X+Sg=='}
+第二个URL的参数 &lt;class 'dict'&gt;
+下单 https://t01-mapi.deepcoin.pro/pc/create-order
+{'retCode': 100001, 'retMsg': '杠杆不能为空', 'retData': {}, 'retHtml': ''}
+{'id': 6, 'order_id': 5609, 'platorder_id': '571952028', 'uid': 353677, 'price': '132.10000000', 'amount_e8': 0, 'qty': '0.10000000', 'fee': '0.00072621', 'side': 'BUY', 'order_type': 'MARKET', 'timestamp': 1578050396622, 'platform': 0, 'symbol': 'ETHUSDT', 'app_id': 1, 'profit_e2': 0, 'balance_e8': 0}
+0
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+    <tr class='errorClass'>
+        <td>test_2.Test_Login</td>
+        <td>2</td>
+        <td>0</td>
+        <td>0</td>
+        <td>2</td>
+        <td><a href="javascript:showClassDetail('c2',2)">详情</a></td>
+    </tr>
+
+<tr id='ft2.1' class='none'>
+    <td class='errorCase'><div class='testcase'>test_shuj_1</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.1')" >
+        错误</a>
+    <div id='div_ft2.1' class="popup_window">
+        <pre>ft2.1: Traceback (most recent call last):
+  File "C:\Program Files\Python36\lib\site-packages\ddt.py", line 182, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\自动化\deep\test_Case\test_2.py", line 21, in test_shuj
+    code=int(data['code'])
+KeyError: 'code'
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='ft2.2' class='none'>
+    <td class='errorCase'><div class='testcase'>test_shuj_2</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.2')" >
+        错误</a>
+    <div id='div_ft2.2' class="popup_window">
+        <pre>ft2.2: Traceback (most recent call last):
+  File "C:\Program Files\Python36\lib\site-packages\ddt.py", line 182, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\自动化\deep\test_Case\test_2.py", line 21, in test_shuj
+    code=int(data['code'])
+KeyError: 'code'
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+    <tr class='passClass'>
+        <td>test_Limit_buy_drop.Test_Login</td>
+        <td>2</td>
+        <td>2</td>
+        <td>0</td>
+        <td>0</td>
+        <td><a href="javascript:showClassDetail('c3',2)">详情</a></td>
+    </tr>
+
+<tr id='pt3.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_shuj_1</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.1')" >
+        通过</a>
+    <div id='div_pt3.1' class="popup_window">
+        <pre>pt3.1: [2020-06-08 17:30:34.235023] INFO: interface: 限价买跌计算强平价开始
+100.0
+维持保证金 0.005
+强平价 8955.0
+{'quantity': 0.5, 'lever': 100.0, 'bs_flag': 2, 'price': 9000.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+bnmMej1ij0+Sa2FYwo/fTF3/pEU5Pa+bv/LDNkxlENzlUARC6wPMdYdwrt+pLYPeqDhil9k4WkK3hjyE2xiXjQ==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173036315702182658'
+查询订单 {'order_id': 'O20200608173036315702182658', 'uid': 315702, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('45.000000000000000000'), 'open_fee': Decimal('33.750000000000000000'), 'close_fee': Decimal('33.750000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173036315702122354', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608636, 'update_time': 1591608636, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+下单金额 112.5
+keyong 999246.454545460000000000
+112.5
+剩余余额 112.5
+22.5
+brbqP9jIoK1s+xTyj1sCXGWFKstL5FmN4pp+DzRUCiSqsaRqZ2+xhTPqbytcdeEJ98IyMtv6In/zUa5tDZJD2Q==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173038315703741455'
+查询订单 {'order_id': 'O20200608173038315703741455', 'uid': 315703, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('45.000000000000000000'), 'open_fee': Decimal('33.750000000000000000'), 'close_fee': Decimal('33.750000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173038315703850920', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608638, 'update_time': 1591608638, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+下单金额 112.5
+keyong 986560.230945460000000000
+112.5
+剩余余额 112.5
+22.5
+[2020-06-08 17:30:38.600251] INFO: interface: 限价买跌计算强平价结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt3.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_shuj_2</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.2')" >
+        通过</a>
+    <div id='div_pt3.2' class="popup_window">
+        <pre>pt3.2: [2020-06-08 17:30:38.601249] INFO: interface: 限价买跌计算强平价开始
+110.0
+维持保证金 0.005
+强平价 6971.363636363637
+{'quantity': 0.5, 'lever': 110.0, 'bs_flag': 1, 'price': 7000.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+bnmMej1ij0+Sa2FYwo/fTF3/pEU5Pa+bv/LDNkxlENzlUARC6wPMdYdwrt+pLYPeqDhil9k4WkK3hjyE2xiXjQ==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173040315702614519'
+查询订单 {'order_id': 'O20200608173040315702614519', 'uid': 315702, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('31.818100000000000000'), 'open_fee': Decimal('26.250000000000000000'), 'close_fee': Decimal('26.250000000000000000'), 'lever': Decimal('110.000000000000000000'), 'bs_flag': 1, 'price': Decimal('7000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173040315702640662', 'trade_currency': Decimal('31.818100000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608640, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608640, 'update_time': 1591608640, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+31.818181818182 != 31.8181 : 保证金不相等
+下单金额 84.31818181818181
+keyong 999162.136445460000000000
+84.31809999991674
+剩余余额 84.31809999991674
+84.31809999991674 != 84.31818181818181 : 扣减额度不正确
+17.5
+brbqP9jIoK1s+xTyj1sCXGWFKstL5FmN4pp+DzRUCiSqsaRqZ2+xhTPqbytcdeEJ98IyMtv6In/zUa5tDZJD2Q==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173042315703177624'
+查询订单 {'order_id': 'O20200608173042315703177624', 'uid': 315703, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('31.818100000000000000'), 'open_fee': Decimal('26.250000000000000000'), 'close_fee': Decimal('26.250000000000000000'), 'lever': Decimal('110.000000000000000000'), 'bs_flag': 1, 'price': Decimal('7000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173042315703817490', 'trade_currency': Decimal('31.818100000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608642, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608642, 'update_time': 1591608642, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+31.818181818182 != 31.8181 : 保证金不相等
+下单金额 84.31818181818181
+keyong 986475.912845460000000000
+84.31810000003316
+剩余余额 84.31810000003316
+84.31810000003316 != 84.31818181818181 : 扣减额度不正确
+17.5
+[2020-06-08 17:30:42.939929] INFO: interface: 限价买跌计算强平价结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+    <tr class='passClass'>
+        <td>test_Open_positions.Test_Login_Open</td>
+        <td>4</td>
+        <td>4</td>
+        <td>0</td>
+        <td>0</td>
+        <td><a href="javascript:showClassDetail('c4',4)">详情</a></td>
+    </tr>
+
+<tr id='pt4.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_1_Open_dir</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.1')" >
+        通过</a>
+    <div id='div_pt4.1' class="popup_window">
+        <pre>pt4.1: [2020-06-08 17:30:42.941918] INFO: interface: 合仓开空开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315782, 'token': 'CV9pGUUNlSYhn2LtMkvxiIhZaWAuR2sqBmgT5PPwTsqXc91rsjvF0NjXgHpn5kQXAbnFr3ngvCNAH+UgX+M50g==', 'coins_access_token': '954307ea-ed08-4401-ae1a-9d28b0edd896', 'coins_refresh_token': 'afc6c8a8-6aab-4e76-878b-4b07c59de317', 'coins_expires_in': 86980, 'isTrans': False, 'user': {'name': None, 'nickname': '妙旺16888', 'mobile': '15868741319', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': 'f5fafa10aefecf869f0a55b9cfdfe2d4', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10116, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+{'quantity': '0.7', 'lever': '200', 'bs_flag': '1', 'price': '8000', 'order_type': '2', 'contract_id': 'BTCUSDT'}
+https://t01-mapi.deepcoin.pro/pc/create-order
+{'quantity': '0.3', 'lever': '200', 'bs_flag': '1', 'price': '8555', 'order_type': '2', 'contract_id': 'BTCUSDT'}
+CV9pGUUNlSYhn2LtMkvxiIhZaWAuR2sqBmgT5PPwTsqXc91rsjvF0NjXgHpn5kQXAbnFr3ngvCNAH+UgX+M50g==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173046315782158396'
+查询订单 {'order_id': 'O20200608173046315782158396', 'uid': 315782, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('28.000000000000000000'), 'open_fee': Decimal('42.000000000000000000'), 'close_fee': Decimal('42.000000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8000.000000000000000000'), 'quantity': Decimal('0.700000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173046315782491066', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608646, 'update_time': 1591608646, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+execl计算起始保证金 28.0
+'8000' != Decimal('8000.000000000000000000') : 参数1下单价格跟数据库价格不一致
+----------------------------------------------------------------------------------------------
+https://t01-mapi.deepcoin.pro/pc/create-order
+订单id {'retCode': 0, 'retMsg': '委托下单成功', 'retData': {'plan_order_id': 'O20200608173046315782158396'}, 'retHtml': ''}
+订单 委托下单成功
+SELECT * FROM `pc_order` WHERE order_id='O20200608173047315782105463'
+查2询订单 {'order_id': 'O20200608173047315782105463', 'uid': 315782, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('12.832500000000000000'), 'open_fee': Decimal('19.248700000000000000'), 'close_fee': Decimal('19.248700000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8555.000000000000000000'), 'quantity': Decimal('0.300000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173046315782491066', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608647, 'update_time': 1591608647, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+execl计算起始保证金 12.8325
+'8555' != Decimal('8555.000000000000000000') : 参数1下单价格跟数据库价格不一致
+[2020-06-08 17:30:47.086161] INFO: interface: 合仓开空结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt4.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_2_Open_many</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.2')" >
+        通过</a>
+    <div id='div_pt4.2' class="popup_window">
+        <pre>pt4.2: [2020-06-08 17:30:47.088156] INFO: interface: 合仓开空开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 316095, 'token': 'JY4z/c2qQAg9ZG4jhId6ucefyMlyR/vSvMK1k/njeTLphYF5ew6Fg7aWGTHrBRn9cS4xcU7AsV+y2+hqmlYVMg==', 'coins_access_token': 'b40e0d68-ef65-4b43-8aa0-77816941a54f', 'coins_refresh_token': 'd137a26f-f579-4f44-8cf6-533aa7745957', 'coins_expires_in': 321815, 'isTrans': False, 'user': {'name': None, 'nickname': '18482384584', 'mobile': '18482384584', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': '5fbb95ed8efb37e6e6b23bc266181877', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10576, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+{'quantity': '0.7', 'lever': '100', 'bs_flag': '2', 'price': '9500', 'order_type': '2', 'contract_id': 'BTCUSDT'}
+https://t01-mapi.deepcoin.pro/pc/create-order
+{'quantity': '0.3', 'lever': '100', 'bs_flag': '2', 'price': '9400', 'order_type': '2', 'contract_id': 'BTCUSDT'}
+JY4z/c2qQAg9ZG4jhId6ucefyMlyR/vSvMK1k/njeTLphYF5ew6Fg7aWGTHrBRn9cS4xcU7AsV+y2+hqmlYVMg==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173050316095754690'
+查询订单 {'order_id': 'O20200608173050316095754690', 'uid': 316095, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('66.500000000000000000'), 'open_fee': Decimal('49.875000000000000000'), 'close_fee': Decimal('49.875000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9500.000000000000000000'), 'quantity': Decimal('0.700000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173050316095610080', 'trade_currency': Decimal('66.500000000000000000'), 'trade_quantity': Decimal('0.700000000000000000'), 'trade_time': 1591608651, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608651, 'update_time': 1591608651, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+execl计算起始保证金 66.5
+'9500' != Decimal('9500.000000000000000000') : 参数1下单价格跟数据库价格不一致
+----------------------------------------------------------------------------------------------
+https://t01-mapi.deepcoin.pro/pc/create-order
+订单id {'retCode': 0, 'retMsg': '委托下单成功', 'retData': {'plan_order_id': 'O20200608173050316095754690'}, 'retHtml': ''}
+订单 委托下单成功
+SELECT * FROM `pc_order` WHERE order_id='O20200608173052316095449661'
+查2询订单 {'order_id': 'O20200608173052316095449661', 'uid': 316095, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('28.200000000000000000'), 'open_fee': Decimal('21.150000000000000000'), 'close_fee': Decimal('21.150000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9400.000000000000000000'), 'quantity': Decimal('0.300000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173050316095610080', 'trade_currency': Decimal('28.200000000000000000'), 'trade_quantity': Decimal('0.300000000000000000'), 'trade_time': 1591608652, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608652, 'update_time': 1591608652, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+execl计算起始保证金 28.2
+'9400' != Decimal('9400.000000000000000000') : 参数1下单价格跟数据库价格不一致
+合仓合约数量 1.0
+合仓仓位价值 5670.0
+人为算出起始保证金 56.7
+[2020-06-08 17:30:51.532347] INFO: interface: 合仓开空结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt4.3' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_3_Open_list</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.3')" >
+        通过</a>
+    <div id='div_pt4.3' class="popup_window">
+        <pre>pt4.3: [2020-06-08 17:30:51.534341] INFO: interface: 合仓开空开始
+&lt;class 'list'&gt;
+[{'order_id': 'O20200608173046315782158396', 'uid': 315782, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('28.000000000000000000'), 'open_fee': Decimal('42.000000000000000000'), 'close_fee': Decimal('42.000000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8000.000000000000000000'), 'quantity': Decimal('0.700000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173046315782491066', 'trade_currency': Decimal('28.000000000000000000'), 'trade_quantity': Decimal('0.700000000000000000'), 'trade_time': 1591608652, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608646, 'update_time': 1591608652, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173047315782105463', 'uid': 315782, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('12.832500000000000000'), 'open_fee': Decimal('19.248700000000000000'), 'close_fee': Decimal('19.248700000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8555.000000000000000000'), 'quantity': Decimal('0.300000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173046315782491066', 'trade_currency': Decimal('12.832500000000000000'), 'trade_quantity': Decimal('0.300000000000000000'), 'trade_time': 1591608651, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608647, 'update_time': 1591608651, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}]
+T20200608173046315782491066
+T20200608173046315782491066
+40.832500000000000000
+----------------------------------------------------------------------------------------------------
+1.000000000000000000
+select * from pc_trade_order where order_id in (select DISTINCT user_order_id from pc_order where uid in ('315782'))
+数据库起始保证金 40.832500000000000000
+方向 1
+空仓强平价格 8166.500000000000000000000000
+数据库空仓强平价格 8125.667500000000000000
+Decimal('8166.5000') != Decimal('8125.667500000000000000') : 空仓强平价格不一致
+40.83250000000000000000000000 40.832500000000000000
+[2020-06-08 17:30:56.054049] INFO: interface: 合仓开空结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt4.4' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_4_Open_list_to</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.4')" >
+        通过</a>
+    <div id='div_pt4.4' class="popup_window">
+        <pre>pt4.4: [2020-06-08 17:30:56.056042] INFO: interface: 合仓开空开始
+&lt;class 'list'&gt;
+[{'order_id': 'O20200608173050316095754690', 'uid': 316095, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('66.500000000000000000'), 'open_fee': Decimal('49.875000000000000000'), 'close_fee': Decimal('49.875000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9500.000000000000000000'), 'quantity': Decimal('0.700000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173050316095610080', 'trade_currency': Decimal('66.500000000000000000'), 'trade_quantity': Decimal('0.700000000000000000'), 'trade_time': 1591608651, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608651, 'update_time': 1591608651, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173052316095449661', 'uid': 316095, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('28.200000000000000000'), 'open_fee': Decimal('21.150000000000000000'), 'close_fee': Decimal('21.150000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9400.000000000000000000'), 'quantity': Decimal('0.300000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173050316095610080', 'trade_currency': Decimal('28.200000000000000000'), 'trade_quantity': Decimal('0.300000000000000000'), 'trade_time': 1591608652, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608652, 'update_time': 1591608652, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}]
+T20200608173050316095610080
+T20200608173050316095610080
+94.700000000000000000
+----------------------------------------------------------------------------------------------------
+1.000000000000000000
+select * from pc_trade_order where order_id in (select DISTINCT user_order_id from pc_order where uid in ('316095'))
+数据库起始保证金 94.700000000000000000
+Decimal('81.6650') != Decimal('94.700000000000000000') : 起始保证金数据不一致
+方向 2
+多仓强平价格 8125.667500000000000000000000
+40.83250000000000000000000000 40.832500000000000000
+[2020-06-08 17:30:57.616518] INFO: interface: 合仓开空结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+    <tr class='errorClass'>
+        <td>test_all_Limit_rise.Test_Login_all_Limit</td>
+        <td>3</td>
+        <td>2</td>
+        <td>0</td>
+        <td>1</td>
+        <td><a href="javascript:showClassDetail('c5',3)">详情</a></td>
+    </tr>
+
+<tr id='pt5.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_1_shuj_1</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.1')" >
+        通过</a>
+    <div id='div_pt5.1' class="popup_window">
+        <pre>pt5.1: [2020-06-08 17:30:57.618515] INFO: interface: 全仓限价开多计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 316220, 'token': 'XZeWLINEutCbuXtPPDGM2y+8eMNY8uxbmyq6Nmab59DqibqCQhz4c7tF8/yPH+PvDJDm12Q9QCEECT6rox/GpA==', 'coins_access_token': '29a65160-7270-4d1c-929c-1e2484edb9b3', 'coins_refresh_token': '6e8bca50-a487-4534-872f-97e2a059620b', 'coins_expires_in': 419756, 'isTrans': False, 'user': {'name': None, 'nickname': '至善了无', 'mobile': '13056575076', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': '2089d0552aeb24fda5664c3a665d6db2', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10577, 'mykey_id': None, 'open_financial': 0, 'contract_type': 1}}, 'retHtml': ''}
+1
+1
+登录成功
+[1]
+结束
+100.0
+8566.0 100.0 0.005
+8566.0 100.0 0.005
+&lt;class 'float'&gt;
+强平价 8523.17
+{'quantity': 0.5, 'lever': 100.0, 'bs_flag': 2, 'price': 8566.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+&lt;class 'list'&gt;
+-----------------------------------
+[1]
+XZeWLINEutCbuXtPPDGM2y+8eMNY8uxbmyq6Nmab59DqibqCQhz4c7tF8/yPH+PvDJDm12Q9QCEECT6rox/GpA==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173101316220719639'
+查询订单 {'order_id': 'O20200608173101316220719639', 'uid': 316220, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('42.830000000000000000'), 'open_fee': Decimal('32.122500000000000000'), 'close_fee': Decimal('32.122500000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('8566.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173101316220830262', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608661, 'update_time': 1591608661, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+32.1225 != Decimal('32.122500000000000000')
+下单金额 107.075
+keyong 997678.150000000000000000
+997785.225000000000000000
+107.07499999995343
+正确扣减的金额 107.07499999995343
+107.07499999995343 != 107.075 : 扣减额度不正确
+维持保证金 21.415
+[2020-06-08 17:31:01.868738] INFO: interface: 全仓限价开多计算强平价结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt5.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_2_all_drop_1</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.2')" >
+        通过</a>
+    <div id='div_pt5.2' class="popup_window">
+        <pre>pt5.2: [2020-06-08 17:31:01.870734] INFO: interface: 全仓限价开多计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315944, 'token': 'jSlHvQ8fw/Jph95KFnkum11RvNz/t/S8/R81myXSSgJXMSj0rFHSxeaXh/RrAX0iioFFxtoIu5QwcDVZMSRv0A==', 'coins_access_token': '54badff6-c95d-4a4d-b7f0-a41a2c653323', 'coins_refresh_token': '9d59514c-c1b2-430f-977f-7d790185f58e', 'coins_expires_in': 165255, 'isTrans': False, 'user': {'name': None, 'nickname': '上天入海', 'mobile': '17835815253', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': 'a1e6319fbacc38b4aab791cc71d7e2a0', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10575, 'mykey_id': None, 'open_financial': 0, 'contract_type': 1}}, 'retHtml': ''}
+1
+1
+登录成功
+[1]
+结束
+100.0
+8500.0 100.0 0.005
+8500.0 100.0 0.005
+&lt;class 'float'&gt;
+强平价 8457.5
+{'quantity': 0.5, 'lever': 100.0, 'bs_flag': 1, 'price': 8500.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+&lt;class 'list'&gt;
+-----------------------------------
+[1]
+jSlHvQ8fw/Jph95KFnkum11RvNz/t/S8/R81myXSSgJXMSj0rFHSxeaXh/RrAX0iioFFxtoIu5QwcDVZMSRv0A==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173105315944110453'
+查询订单 {'order_id': 'O20200608173105315944110453', 'uid': 315944, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('42.500000000000000000'), 'open_fee': Decimal('31.875000000000000000'), 'close_fee': Decimal('31.875000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8500.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173105315944406150', 'trade_currency': Decimal('42.500000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608665, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608665, 'update_time': 1591608665, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+下单金额 106.25
+keyong 996000.425000000000000000
+996106.675000000000000000
+106.25
+正确扣减的金额 106.25
+维持保证金 21.25
+[2020-06-08 17:31:06.040584] INFO: interface: 全仓限价开多计算强平价结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='ft5.3' class='none'>
+    <td class='errorCase'><div class='testcase'>test_3_strong</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.3')" >
+        错误</a>
+    <div id='div_ft5.3' class="popup_window">
+        <pre>ft5.3: [2020-06-08 17:31:06.042579] INFO: interface: 全仓限价开多计算强平价开始
+&lt;class 'list'&gt;
+[{'order_id': 'O20200606162919315944352662', 'uid': 315944, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('21.000000000000000000'), 'open_fee': Decimal('31.500000000000000000'), 'close_fee': Decimal('31.500000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 2, 'price': Decimal('8400.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200606162919315944252468', 'trade_currency': Decimal('21.000000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591432164, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591432159, 'update_time': 1591432164, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200606162924315944481428', 'uid': 315944, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('20.000000000000000000'), 'open_fee': Decimal('30.000000000000000000'), 'close_fee': Decimal('30.000000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200606162924315944340634', 'trade_currency': Decimal('20.000000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591432164, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591432164, 'update_time': 1591432164, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173101316220719639', 'uid': 316220, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('42.830000000000000000'), 'open_fee': Decimal('32.122500000000000000'), 'close_fee': Decimal('32.122500000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('8566.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173101316220830262', 'trade_currency': Decimal('42.830000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608665, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608661, 'update_time': 1591608665, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173105315944110453', 'uid': 315944, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('42.500000000000000000'), 'open_fee': Decimal('31.875000000000000000'), 'close_fee': Decimal('31.875000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8500.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173105315944406150', 'trade_currency': Decimal('42.500000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608665, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608665, 'update_time': 1591608665, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}]
+T20200606162919315944252468
+----------------------------------------------------------------------------------------------------
+[Decimal('200.000000000000000000')]
+111 ['T20200606162919315944252468']
+T20200606162924315944340634
+----------------------------------------------------------------------------------------------------
+[Decimal('200.000000000000000000'), Decimal('200.000000000000000000')]
+111 ['T20200606162919315944252468', 'T20200606162924315944340634']
+4
+200.000000000000000000
+select * from pc_trade_order where order_id  in ('T20200606162919315944252468')
+[2020-06-08 17:31:07.568612] INFO: interface: 全仓限价开多计算强平价结束
+Traceback (most recent call last):
+  File "D:\自动化\deep\test_Case\test_all_Limit_rise.py", line 324, in test_3_strong
+    baozhengjin=(order_id['open_price']*order_id['contract_qty'])/order_id['lever']
+TypeError: 'NoneType' object is not subscriptable
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+    <tr class='errorClass'>
+        <td>test_all_Limit_rise_Fall.Test_Loginrisr</td>
+        <td>3</td>
+        <td>2</td>
+        <td>0</td>
+        <td>1</td>
+        <td><a href="javascript:showClassDetail('c6',3)">详情</a></td>
+    </tr>
+
+<tr id='pt6.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_1_shuj_1</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.1')" >
+        通过</a>
+    <div id='div_pt6.1' class="popup_window">
+        <pre>pt6.1: [2020-06-08 17:31:07.571603] INFO: interface: 全仓限价开多+开空强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315944, 'token': '3cksopjRGVDwNyZBjJt1SPm/8fp2s/ZPnxzRxYO/Hx72l+xDPdPuNfCIp4AOiGqHlUDjEAPfGrr46lpQ+iwLgw==', 'coins_access_token': '54badff6-c95d-4a4d-b7f0-a41a2c653323', 'coins_refresh_token': '9d59514c-c1b2-430f-977f-7d790185f58e', 'coins_expires_in': 165249, 'isTrans': False, 'user': {'name': None, 'nickname': '上天入海', 'mobile': '17835815253', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': 'a1e6319fbacc38b4aab791cc71d7e2a0', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10575, 'mykey_id': None, 'open_financial': 0, 'contract_type': 1}}, 'retHtml': ''}
+1
+1
+登录成功
+[1]
+结束
+强平价 8400.0
+{'quantity': 0.5, 'lever': 200.0, 'bs_flag': 2, 'price': 8400.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+&lt;class 'list'&gt;
+-----------------------------------
+3cksopjRGVDwNyZBjJt1SPm/8fp2s/ZPnxzRxYO/Hx72l+xDPdPuNfCIp4AOiGqHlUDjEAPfGrr46lpQ+iwLgw==
+查看总额度 996000.425000000000000000
+SELECT * FROM `pc_order` WHERE order_id='O20200608173111315944880027'
+查询订单 {'order_id': 'O20200608173111315944880027', 'uid': 315944, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('21.000000000000000000'), 'open_fee': Decimal('31.500000000000000000'), 'close_fee': Decimal('31.500000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 2, 'price': Decimal('8400.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173111315944312580', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608671, 'update_time': 1591608671, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+下单金额 84.0
+keyong 995916.425000000000000000
+996000.425000000000000000
+84.0
+正确扣减的金额 84.0
+维持保证金 21.0
+[2020-06-08 17:31:11.862878] INFO: interface: 全仓限价开多+开空强平价介绍
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt6.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_1_shuj_2</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.2')" >
+        通过</a>
+    <div id='div_pt6.2' class="popup_window">
+        <pre>pt6.2: [2020-06-08 17:31:11.864873] INFO: interface: 全仓限价开多+开空强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315944, 'token': 'C1KdUMxDt7AlPO0hNYxiSZzx7etSTFIBf6CGm1mVz+J5mdk7BNyzAYofA9+K3HcqAsrZ15tm1WcDQBPuMmtIdQ==', 'coins_access_token': '54badff6-c95d-4a4d-b7f0-a41a2c653323', 'coins_refresh_token': '9d59514c-c1b2-430f-977f-7d790185f58e', 'coins_expires_in': 165245, 'isTrans': False, 'user': {'name': None, 'nickname': '上天入海', 'mobile': '17835815253', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': 'a1e6319fbacc38b4aab791cc71d7e2a0', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10575, 'mykey_id': None, 'open_financial': 0, 'contract_type': 1}}, 'retHtml': ''}
+1
+1
+登录成功
+[1]
+结束
+强平价 8000.0
+{'quantity': 0.5, 'lever': 200.0, 'bs_flag': 1, 'price': 8000.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+&lt;class 'list'&gt;
+-----------------------------------
+C1KdUMxDt7AlPO0hNYxiSZzx7etSTFIBf6CGm1mVz+J5mdk7BNyzAYofA9+K3HcqAsrZ15tm1WcDQBPuMmtIdQ==
+查看总额度 995916.425000000000000000
+'挂单量已达上限' != '委托下单成功'
+- 挂单量已达上限
++ 委托下单成功
+ : 下单失败
+SELECT * FROM `pc_order` WHERE order_id='None'
+查询订单 None
+'NoneType' object is not subscriptable
+'NoneType' object is not subscriptable
+'NoneType' object is not subscriptable
+下单金额 80.0
+keyong 995916.425000000000000000
+995916.425000000000000000
+0.0
+正确扣减的金额 0.0
+0.0 != 80.0 : 扣减额度不正确
+维持保证金 20.0
+[2020-06-08 17:31:16.285561] INFO: interface: 全仓限价开多+开空强平价介绍
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='ft6.3' class='none'>
+    <td class='errorCase'><div class='testcase'>test_2_strong</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft6.3')" >
+        错误</a>
+    <div id='div_ft6.3' class="popup_window">
+        <pre>ft6.3: [2020-06-08 17:31:16.287589] INFO: interface: 全仓限价开多+开空强平价开始
+&lt;class 'list'&gt;
+[{'order_id': 'O20200606162919315944352662', 'uid': 315944, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('21.000000000000000000'), 'open_fee': Decimal('31.500000000000000000'), 'close_fee': Decimal('31.500000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 2, 'price': Decimal('8400.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200606162919315944252468', 'trade_currency': Decimal('21.000000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591432164, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591432159, 'update_time': 1591432164, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200606162924315944481428', 'uid': 315944, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('20.000000000000000000'), 'open_fee': Decimal('30.000000000000000000'), 'close_fee': Decimal('30.000000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200606162924315944340634', 'trade_currency': Decimal('20.000000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591432164, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591432164, 'update_time': 1591432164, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173105315944110453', 'uid': 315944, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('42.500000000000000000'), 'open_fee': Decimal('31.875000000000000000'), 'close_fee': Decimal('31.875000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8500.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173105315944406150', 'trade_currency': Decimal('42.500000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608665, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608665, 'update_time': 1591608665, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173111315944880027', 'uid': 315944, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('21.000000000000000000'), 'open_fee': Decimal('31.500000000000000000'), 'close_fee': Decimal('31.500000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 2, 'price': Decimal('8400.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173111315944312580', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608671, 'update_time': 1591608671, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}]
+T20200606162919315944252468
+----------------------------------------------------------------------------------------------------
+[Decimal('200.000000000000000000')]
+111 ['T20200606162919315944252468']
+T20200606162924315944340634
+----------------------------------------------------------------------------------------------------
+[Decimal('200.000000000000000000'), Decimal('200.000000000000000000')]
+111 ['T20200606162919315944252468', 'T20200606162924315944340634']
+4
+200.000000000000000000
+select * from pc_trade_order where order_id  in ('T20200606162919315944252468')
+[2020-06-08 17:31:17.857360] INFO: interface: 全仓限价开多+开空强平价介绍
+Traceback (most recent call last):
+  File "D:\自动化\deep\test_Case\test_all_Limit_rise_Fall.py", line 186, in test_2_strong
+    baozhengjin = (order_id['open_price'] * order_id['contract_qty']) / order_id['lever']
+TypeError: 'NoneType' object is not subscriptable
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+    <tr class='passClass'>
+        <td>test_all_single_Margin.Test_Loginrisr</td>
+        <td>2</td>
+        <td>2</td>
+        <td>0</td>
+        <td>0</td>
+        <td><a href="javascript:showClassDetail('c7',2)">详情</a></td>
+    </tr>
+
+<tr id='pt7.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_1_shuj</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.1')" >
+        通过</a>
+    <div id='div_pt7.1' class="popup_window">
+        <pre>pt7.1: [2020-06-08 17:31:17.859356] INFO: interface: 全仓追加保证金开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315838, 'token': '5/hGBzWpIqJ95EbWgsObK0Qiuvu1K+9spxFJ8t8NNsbc+R3CGll3f/RQGIlVFYPzra0DNW/Ij8rLKyNYtddg6w==', 'coins_access_token': '401354e1-c632-490c-bf7e-07d8bb89c5f5', 'coins_refresh_token': '95ba51fa-2857-46c8-97a2-4b0dd4975331', 'coins_expires_in': 584081, 'isTrans': False, 'user': {'name': None, 'nickname': '爱的结晶', 'mobile': '13934092976', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': 'a41b771d58b6604c45c6fb6ad5efcc72', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10136, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+{'quantity': '0.7', 'lever': '200', 'bs_flag': '1', 'price': '8000', 'order_type': '2', 'contract_id': 'BTCUSDT'}
+https://t01-mapi.deepcoin.pro/pc/create-order
+{'quantity': '0.7', 'lever': '200', 'bs_flag': '2', 'price': '8000', 'order_type': '2', 'contract_id': 'BTCUSDT'}
+https://t01-mapi.deepcoin.pro/pc/trade-order-list
+https://t01-mapi.deepcoin.pro/pc/append-bail
+{'margin_amount': '20', 'side': '1'}
+-----------------------------------
+5/hGBzWpIqJ95EbWgsObK0Qiuvu1K+9spxFJ8t8NNsbc+R3CGll3f/RQGIlVFYPzra0DNW/Ij8rLKyNYtddg6w==
+查看总额度 94512.000000000000000000
+SELECT * FROM `pc_order` WHERE order_id='O20200608173122315838321334'
+查询订单 {'order_id': 'O20200608173122315838321334', 'uid': 315838, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('28.000000000000000000'), 'open_fee': Decimal('42.000000000000000000'), 'close_fee': Decimal('42.000000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8000.000000000000000000'), 'quantity': Decimal('0.700000000000000000'), 'order_type': 2, 'order_status': 3, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173122315838541982', 'trade_currency': Decimal('20.000000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608682, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608682, 'update_time': 1591608682, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+execl计算起始保证金 28.0
+'8000' != Decimal('8000.000000000000000000') : 参数1下单价格跟数据库价格不一致
+***********************************************************************************
+SELECT * FROM `pc_order` WHERE order_id='O20200608173123315838849918'
+查询订单 {'order_id': 'O20200608173123315838849918', 'uid': 315838, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('28.000000000000000000'), 'open_fee': Decimal('42.000000000000000000'), 'close_fee': Decimal('42.000000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 2, 'price': Decimal('8000.000000000000000000'), 'quantity': Decimal('0.700000000000000000'), 'order_type': 2, 'order_status': 3, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173123315838949714', 'trade_currency': Decimal('8.000000000000000000'), 'trade_quantity': Decimal('0.200000000000000000'), 'trade_time': 1591608683, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608683, 'update_time': 1591608683, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+execl计算起始保证金 28.0
+'8000' != Decimal('8000.000000000000000000') : 参数1下单价格跟数据库价格不一致
+----------------------------------------------------------------------------------------------
+https://t01-mapi.deepcoin.pro/pc/trade-order-list
+&lt;class 'dict'&gt;
+{'retCode': 0, 'retMsg': '', 'retData': [{'order_id': 'T20200608173123315838949714', 'contract_id': 'BTCUSDT', 'symbol': 'BTC/USDT', 'amount': '8.000000000000000000', 'lever': '200.000000000000000000', 'open_price': '8000.000000000000000000', 'bs_flag': '2', 'contract_qty': 0.2, 'can_closed_qty': 0.2, 'force_price': '8040.000000000000000000', 'sp_price': '0.000000000000000000', 'sl_price': '0.000000000000000000', 'fund_rate': '0.005000000000000000', 'waiver_rate': '0.000000000000000000', 'create_time': '1591608683'}, {'order_id': 'T20200608173122315838541982', 'contract_id': 'BTCUSDT', 'symbol': 'BTC/USDT', 'amount': '28.000000000000000000', 'lever': '200.000000000000000000', 'open_price': '8285.714285714285714286', 'bs_flag': '1', 'contract_qty': 0.7, 'can_closed_qty': 0.7, 'force_price': '8244.285714285714285714', 'sp_price': '0.000000000000000000', 'sl_price': '0.000000000000000000', 'fund_rate': '0.005000000000000000', 'waiver_rate': '0.000000000000000000', 'create_time': '1591608682'}], 'retHtml': ''}
+订单id {'retCode': 0, 'retMsg': '委托下单成功', 'retData': {'plan_order_id': 'O20200608173122315838321334'}, 'retHtml': ''}
+-----------------------------------------------------------------------------------
+&lt;class 'dict'&gt;
+&lt;class 'dict'&gt;
+[2020-06-08 17:31:23.374526] INFO: interface: 全仓追加保证金强结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt7.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_2_strong</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.2')" >
+        通过</a>
+    <div id='div_pt7.2' class="popup_window">
+        <pre>pt7.2: [2020-06-08 17:31:23.375496] INFO: interface: 全仓追加保证金开始
+&lt;class 'list'&gt;
+[{'order_id': 'O20200608173122315838321334', 'uid': 315838, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('28.000000000000000000'), 'open_fee': Decimal('42.000000000000000000'), 'close_fee': Decimal('42.000000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 1, 'price': Decimal('8000.000000000000000000'), 'quantity': Decimal('0.700000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173122315838541982', 'trade_currency': Decimal('28.000000000000000000'), 'trade_quantity': Decimal('0.700000000000000000'), 'trade_time': 1591608683, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608682, 'update_time': 1591608683, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173123315838849918', 'uid': 315838, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('28.000000000000000000'), 'open_fee': Decimal('42.000000000000000000'), 'close_fee': Decimal('42.000000000000000000'), 'lever': Decimal('200.000000000000000000'), 'bs_flag': 2, 'price': Decimal('8000.000000000000000000'), 'quantity': Decimal('0.700000000000000000'), 'order_type': 2, 'order_status': 3, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173123315838949714', 'trade_currency': Decimal('8.000000000000000000'), 'trade_quantity': Decimal('0.200000000000000000'), 'trade_time': 1591608683, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608683, 'update_time': 1591608683, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}]
+T20200608173122315838541982
+----------------------------------------------------------------------------------------------------
+[Decimal('200.000000000000000000')]
+111 ['T20200608173122315838541982']
+T20200608173123315838949714
+----------------------------------------------------------------------------------------------------
+[Decimal('200.000000000000000000'), Decimal('200.000000000000000000')]
+111 ['T20200608173122315838541982', 'T20200608173123315838949714']
+4
+200.000000000000000000
+select * from pc_trade_order where order_id  in ('T20200608173122315838541982')
+数据库起始保证金 28.000000000000000000
+Decimal('29.0000') != Decimal('28.000000000000000000') : 起始保证金数据不一致
+Decimal('29.00000000000000000000100000') != Decimal('29.000000000000000000') : 维持保证金不一致
+方向 1
+空仓强平价格 -142981.4285714285714285717129
+数据库空仓强平价格 8244.285714285714285714
+Decimal('-142981.4286') != Decimal('8244.285714285714285714') : 空仓强平价格不一致
+3
+200.000000000000000000
+select * from pc_trade_order where order_id  in ('T20200608173123315838949714')
+数据库起始保证金 8.000000000000000000
+8.000000000000000000000000000 8.000000000000000000
+方向 2
+多仓强平价格 -463440.00000
+Decimal('-463440.0000') != Decimal('8040.000000000000000000') : 多仓强平价格不一致
+[2020-06-08 17:31:26.401312] INFO: interface: 全仓追加保证金强结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+    <tr class='passClass'>
+        <td>test_buy_Linmit.Test_Login_Limit</td>
+        <td>5</td>
+        <td>5</td>
+        <td>0</td>
+        <td>0</td>
+        <td><a href="javascript:showClassDetail('c8',5)">详情</a></td>
+    </tr>
+
+<tr id='pt8.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_1_shuj_1</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.1')" >
+        通过</a>
+    <div id='div_pt8.1' class="popup_window">
+        <pre>pt8.1: [2020-06-08 17:31:26.405299] INFO: interface: 限价买涨计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315508, 'token': 'RlH+kseADhz5OKbU9iCjdnNELS3+Kku8WWkuSbhsfNkTVriL1vu0ze9bng1+MZYSEXMmaHc8IwIXR5A34idN0Q==', 'coins_access_token': 'c3a6133d-1638-44ec-b867-6c5ae62aa9a9', 'coins_refresh_token': '053edb3d-e1e0-4335-82cc-1e3119479d88', 'coins_expires_in': 65670, 'isTrans': False, 'user': {'name': None, 'nickname': '1***518', 'mobile': '17679235181', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': '08e0c6a633173d33b72b343cf40a25e0', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 9949, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+100.0
+强平价 8865.0
+{'quantity': 0.5, 'lever': 100.0, 'bs_flag': 2, 'price': 9000.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+RlH+kseADhz5OKbU9iCjdnNELS3+Kku8WWkuSbhsfNkTVriL1vu0ze9bng1+MZYSEXMmaHc8IwIXR5A34idN0Q==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173130315508116171'
+查询订单 {'order_id': 'O20200608173130315508116171', 'uid': 315508, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('45.000000000000000000'), 'open_fee': Decimal('33.750000000000000000'), 'close_fee': Decimal('33.750000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173130315508647709', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608690, 'update_time': 1591608690, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+&lt;class 'float'&gt; &lt;class 'float'&gt; &lt;class 'float'&gt;
+SELECT * FROM `pc_contract` WHERE symbol='BTC/USDT'
+keyong 99999985990.822000000000000000
+112.5
+剩余余额 112.5
+[2020-06-08 17:31:30.277986] INFO: interface: 限价买涨计算强平价结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt8.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_1_shuj_2</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.2')" >
+        通过</a>
+    <div id='div_pt8.2' class="popup_window">
+        <pre>pt8.2: [2020-06-08 17:31:30.279981] INFO: interface: 限价买涨计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315508, 'token': 'AKolFwGG6vFKSQVMV9iJB8d6zBavuVEvadHPE595gYteJyO+O1G4tioCdKkuImnWM9rT63LifY+hyAVGTO5xkg==', 'coins_access_token': 'c3a6133d-1638-44ec-b867-6c5ae62aa9a9', 'coins_refresh_token': '053edb3d-e1e0-4335-82cc-1e3119479d88', 'coins_expires_in': 65666, 'isTrans': False, 'user': {'name': None, 'nickname': '1***518', 'mobile': '17679235181', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': '08e0c6a633173d33b72b343cf40a25e0', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 9949, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+110.0
+强平价 6901.363636363637
+{'quantity': 0.5, 'lever': 110.0, 'bs_flag': 1, 'price': 7000.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+AKolFwGG6vFKSQVMV9iJB8d6zBavuVEvadHPE595gYteJyO+O1G4tioCdKkuImnWM9rT63LifY+hyAVGTO5xkg==
+SELECT * FROM `pc_order` WHERE order_id='O20200608173134315508383708'
+查询订单 {'order_id': 'O20200608173134315508383708', 'uid': 315508, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('31.818100000000000000'), 'open_fee': Decimal('26.250000000000000000'), 'close_fee': Decimal('26.250000000000000000'), 'lever': Decimal('110.000000000000000000'), 'bs_flag': 1, 'price': Decimal('7000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173134315508164813', 'trade_currency': Decimal('31.818100000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608694, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608694, 'update_time': 1591608694, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+&lt;class 'float'&gt; &lt;class 'float'&gt; &lt;class 'float'&gt;
+31.8182 != 31.8181 : 保证金不相等
+SELECT * FROM `pc_contract` WHERE symbol='BTC/USDT'
+keyong 99999985906.504000000000000000
+84.31800842285156
+剩余余额 84.31800842285156
+84.31800842285156 != 84.31818181818181 : 扣减额度不正确
+[2020-06-08 17:31:34.550892] INFO: interface: 限价买涨计算强平价结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt8.3' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_2_shujdie_1</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.3')" >
+        通过</a>
+    <div id='div_pt8.3' class="popup_window">
+        <pre>pt8.3: [2020-06-08 17:31:34.551889] INFO: interface: 限价买涨计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315703, 'token': 'bdi1vcjHfeA1Cr03CXP2fZfBXFHXFEAaO9HTb50P0y4cKc/bwTy0JTQYG2qfdXeGx77TWXWVrG7ywjPmz1cXWQ==', 'coins_access_token': '361c34f0-8ea4-438e-8990-2f08b1c2a9be', 'coins_refresh_token': '4df1dd51-6e27-44f1-9675-75f6997cb4ba', 'coins_expires_in': 75786, 'isTrans': False, 'user': {'name': None, 'nickname': '1***141', 'mobile': '19928931418', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': 'bff410633fae21ac8a980b2fe6eb718b', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10066, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+100.0
+维持保证金 0.005
+强平价 8955.0
+{'quantity': 0.5, 'lever': 100.0, 'bs_flag': 2, 'price': 9000.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+bdi1vcjHfeA1Cr03CXP2fZfBXFHXFEAaO9HTb50P0y4cKc/bwTy0JTQYG2qfdXeGx77TWXWVrG7ywjPmz1cXWQ==
+返回订单号 O20200608173138315703779079
+SELECT * FROM `pc_order` WHERE order_id='O20200608173138315703779079'
+查询订单 {'order_id': 'O20200608173138315703779079', 'uid': 315703, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('45.000000000000000000'), 'open_fee': Decimal('33.750000000000000000'), 'close_fee': Decimal('33.750000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173138315703707580', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608698, 'update_time': 1591608698, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+下单金额 112.5
+keyong 986363.412845460000000000
+112.5
+剩余余额 112.5
+[2020-06-08 17:31:38.730178] INFO: interface: 限价买涨计算强平价结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt8.4' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_2_shujdie_2</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.4')" >
+        通过</a>
+    <div id='div_pt8.4' class="popup_window">
+        <pre>pt8.4: [2020-06-08 17:31:38.731144] INFO: interface: 限价买涨计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315703, 'token': 'P0KE+ROj5LJbJ+7rfjU5BktzdcIq3rj41HXVl7G4TLn+ecbnpxSZCfkh/xs0Dz/8FcRj7Xl3HaHrFtHsXH4fcg==', 'coins_access_token': '361c34f0-8ea4-438e-8990-2f08b1c2a9be', 'coins_refresh_token': '4df1dd51-6e27-44f1-9675-75f6997cb4ba', 'coins_expires_in': 75782, 'isTrans': False, 'user': {'name': None, 'nickname': '1***141', 'mobile': '19928931418', 'email': None, 'has_pwd': True, 'kyc_status': 1, 'head_img': '', 'netease_token': 'bff410633fae21ac8a980b2fe6eb718b', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10066, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+110.0
+维持保证金 0.005
+强平价 6971.363636363637
+{'quantity': 0.5, 'lever': 110.0, 'bs_flag': 1, 'price': 7000.0, 'order_type': 2, 'contract_id': 'BTCUSDT'}
+P0KE+ROj5LJbJ+7rfjU5BktzdcIq3rj41HXVl7G4TLn+ecbnpxSZCfkh/xs0Dz/8FcRj7Xl3HaHrFtHsXH4fcg==
+返回订单号 O20200608173142315703856034
+SELECT * FROM `pc_order` WHERE order_id='O20200608173142315703856034'
+查询订单 {'order_id': 'O20200608173142315703856034', 'uid': 315703, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('31.818100000000000000'), 'open_fee': Decimal('26.250000000000000000'), 'close_fee': Decimal('26.250000000000000000'), 'lever': Decimal('110.000000000000000000'), 'bs_flag': 1, 'price': Decimal('7000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173142315703585276', 'trade_currency': Decimal('31.818100000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608702, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608702, 'update_time': 1591608702, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}
+31.8182 != 31.8181 : 保证金不相等
+下单金额 84.31818181818181
+keyong 986279.094745460000000000
+84.31810000003316
+剩余余额 84.31810000003316
+84.31810000003316 != 84.31818181818181 : 扣减额度不正确
+[2020-06-08 17:31:42.949847] INFO: interface: 限价买涨计算强平价结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='pt8.5' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_3_strong</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.5')" >
+        通过</a>
+    <div id='div_pt8.5' class="popup_window">
+        <pre>pt8.5: [2020-06-08 17:31:42.952807] INFO: interface: 限价买涨计算强平价开始
+&lt;class 'list'&gt;
+[{'order_id': 'O20200608173038315703741455', 'uid': 315703, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('45.000000000000000000'), 'open_fee': Decimal('33.750000000000000000'), 'close_fee': Decimal('33.750000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173038315703850920', 'trade_currency': Decimal('45.000000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608642, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608638, 'update_time': 1591608642, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173042315703177624', 'uid': 315703, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('31.818100000000000000'), 'open_fee': Decimal('26.250000000000000000'), 'close_fee': Decimal('26.250000000000000000'), 'lever': Decimal('110.000000000000000000'), 'bs_flag': 1, 'price': Decimal('7000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173042315703817490', 'trade_currency': Decimal('31.818100000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608642, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608642, 'update_time': 1591608642, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173130315508116171', 'uid': 315508, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('45.000000000000000000'), 'open_fee': Decimal('33.750000000000000000'), 'close_fee': Decimal('33.750000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173130315508647709', 'trade_currency': Decimal('45.000000000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608702, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608690, 'update_time': 1591608702, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173134315508383708', 'uid': 315508, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('31.818100000000000000'), 'open_fee': Decimal('26.250000000000000000'), 'close_fee': Decimal('26.250000000000000000'), 'lever': Decimal('110.000000000000000000'), 'bs_flag': 1, 'price': Decimal('7000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173134315508164813', 'trade_currency': Decimal('31.818100000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608694, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608694, 'update_time': 1591608694, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173138315703779079', 'uid': 315703, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('45.000000000000000000'), 'open_fee': Decimal('33.750000000000000000'), 'close_fee': Decimal('33.750000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 2, 'price': Decimal('9000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173138315703707580', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608698, 'update_time': 1591608698, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608173142315703856034', 'uid': 315703, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('31.818100000000000000'), 'open_fee': Decimal('26.250000000000000000'), 'close_fee': Decimal('26.250000000000000000'), 'lever': Decimal('110.000000000000000000'), 'bs_flag': 1, 'price': Decimal('7000.000000000000000000'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 2, 'order_status': 4, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608173142315703585276', 'trade_currency': Decimal('31.818100000000000000'), 'trade_quantity': Decimal('0.500000000000000000'), 'trade_time': 1591608702, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591608702, 'update_time': 1591608702, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}]
+T20200608173038315703850920
+----------------------------------------------------------------------------------------------------
+[Decimal('100.000000000000000000')]
+111 ['T20200608173038315703850920']
+T20200608173042315703817490
+----------------------------------------------------------------------------------------------------
+[Decimal('100.000000000000000000'), Decimal('110.000000000000000000')]
+111 ['T20200608173038315703850920', 'T20200608173042315703817490']
+T20200608173130315508647709
+----------------------------------------------------------------------------------------------------
+[Decimal('100.000000000000000000'), Decimal('110.000000000000000000'), Decimal('100.000000000000000000')]
+111 ['T20200608173038315703850920', 'T20200608173042315703817490', 'T20200608173130315508647709']
+T20200608173134315508164813
+----------------------------------------------------------------------------------------------------
+[Decimal('100.000000000000000000'), Decimal('110.000000000000000000'), Decimal('100.000000000000000000'), Decimal('110.000000000000000000')]
+111 ['T20200608173038315703850920', 'T20200608173042315703817490', 'T20200608173130315508647709', 'T20200608173134315508164813']
+4
+[2020-06-08 17:31:43.770700] INFO: interface: 用户撮合成功
+100.000000000000000000
+select * from pc_trade_order where order_id  in ('T20200608173038315703850920')
+数据库起始保证金 45.000000000000000000
+select * from pc_match where bid_order_id in ('O20200608173038315703741455');
+方向 2
+多仓强平价格 8955.000000000000000000000000
+22.50000000000000000000000000 22.500000000000000000
+4
+[2020-06-08 17:31:45.337077] INFO: interface: 用户撮合成功
+110.000000000000000000
+select * from pc_trade_order where order_id  in ('T20200608173042315703817490')
+数据库起始保证金 31.818100000000000000
+Decimal('40.9091') != Decimal('31.818100000000000000') : 起始保证金数据不一致
+select * from pc_match where bid_order_id in ('O20200608173042315703177624');
+方向 1
+空仓强平价格 9036.818181818181818181818181
+数据库空仓强平价格 8955.000000000000000000
+Decimal('9036.8182') != Decimal('8955.000000000000000000') : 空仓强平价格不一致
+22.50000000000000000000000000 22.500000000000000000
+4
+[2020-06-08 17:31:46.875898] INFO: interface: 用户撮合成功
+100.000000000000000000
+select * from pc_trade_order where order_id  in ('T20200608173130315508647709')
+数据库起始保证金 45.000000000000000000
+select * from pc_match where bid_order_id in ('O20200608173130315508116171');
+方向 2
+多仓强平价格 8955.000000000000000000000000
+22.50000000000000000000000000 22.500000000000000000
+4
+[2020-06-08 17:31:48.423420] INFO: interface: 用户撮合成功
+110.000000000000000000
+select * from pc_trade_order where order_id  in ('T20200608173134315508164813')
+数据库起始保证金 31.818100000000000000
+Decimal('36.3636') != Decimal('31.818100000000000000') : 起始保证金数据不一致
+select * from pc_match where bid_order_id in ('O20200608173134315508383708');
+方向 1
+空仓强平价格 8032.727272727272727272727272
+数据库空仓强平价格 7960.000000000000000000
+Decimal('8032.7273') != Decimal('7960.000000000000000000') : 空仓强平价格不一致
+20.00000000000000000000000000 20.000000000000000000
+[2020-06-08 17:31:49.962344] INFO: interface: 限价买涨计算强平价结束
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+    <tr class='errorClass'>
+        <td>test_market_position.Test_Login_Limit</td>
+        <td>5</td>
+        <td>0</td>
+        <td>0</td>
+        <td>5</td>
+        <td><a href="javascript:showClassDetail('c9',5)">详情</a></td>
+    </tr>
+
+<tr id='ft9.1' class='none'>
+    <td class='errorCase'><div class='testcase'>test_1_shuj_1</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft9.1')" >
+        错误</a>
+    <div id='div_ft9.1' class="popup_window">
+        <pre>ft9.1: [2020-06-08 17:31:49.964336] INFO: interface: 限价买涨计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315908, 'token': 'KD9LaoNk2zmOFN7CwddNI4Zgp6cRplGw+83NlCeDjNUo++CQn3aYSBZ8DsSlng79K76qDOz0BKPtFza/XkQcLw==', 'coins_access_token': '61fe8021-8ce5-42ac-aa6f-506e5e425d92', 'coins_refresh_token': 'b2626442-a1be-4484-8e54-1b6f1ccf35fb', 'coins_expires_in': 95025, 'isTrans': False, 'user': {'name': '王', 'nickname': '撒大声地所所多少多少多所所的双山岛多撒大', 'mobile': '18640436118', 'email': None, 'has_pwd': True, 'kyc_status': 2, 'head_img': '', 'netease_token': '6265c7aa136c0983844c54658556024c', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10167, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+100.0
+[2020-06-08 17:31:51.942423] INFO: interface: 限价买涨计算强平价结束
+Traceback (most recent call last):
+  File "C:\Program Files\Python36\lib\site-packages\ddt.py", line 182, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\自动化\deep\test_Case\test_market_position.py", line 62, in test_1_shuj
+    Strong_parity=price*(1-1/lever-maintenance)
+TypeError: can't multiply sequence by non-int of type 'float'
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='ft9.2' class='none'>
+    <td class='errorCase'><div class='testcase'>test_1_shuj_2</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft9.2')" >
+        错误</a>
+    <div id='div_ft9.2' class="popup_window">
+        <pre>ft9.2: [2020-06-08 17:31:51.944417] INFO: interface: 限价买涨计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315908, 'token': 'rjBgd06bX2//vhRk2Urx6L9XQcF9DV+AeEJbW1N310ZPzy7cHWz5lu0rtviJrtDdYOMQTWDBXFMdfzm5yBA0vg==', 'coins_access_token': '61fe8021-8ce5-42ac-aa6f-506e5e425d92', 'coins_refresh_token': 'b2626442-a1be-4484-8e54-1b6f1ccf35fb', 'coins_expires_in': 95023, 'isTrans': False, 'user': {'name': '王', 'nickname': '撒大声地所所多少多少多所所的双山岛多撒大', 'mobile': '18640436118', 'email': None, 'has_pwd': True, 'kyc_status': 2, 'head_img': '', 'netease_token': '6265c7aa136c0983844c54658556024c', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10167, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+110.0
+[2020-06-08 17:31:53.677624] INFO: interface: 限价买涨计算强平价结束
+Traceback (most recent call last):
+  File "C:\Program Files\Python36\lib\site-packages\ddt.py", line 182, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\自动化\deep\test_Case\test_market_position.py", line 62, in test_1_shuj
+    Strong_parity=price*(1-1/lever-maintenance)
+TypeError: can't multiply sequence by non-int of type 'float'
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='ft9.3' class='none'>
+    <td class='errorCase'><div class='testcase'>test_2_shujdie_1</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft9.3')" >
+        错误</a>
+    <div id='div_ft9.3' class="popup_window">
+        <pre>ft9.3: [2020-06-08 17:31:53.678621] INFO: interface: 限价买涨计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315896, 'token': 'oKw2lNlJ2HjmyPFPIczCCxFDoV8sj5qrskuwNyJf7uWN7469sxFtyt1TlxHMG3n67x9A1WD/wvZjpZc4/3cnig==', 'coins_access_token': 'b519bda5-97c6-49cf-8fc9-29897a223488', 'coins_refresh_token': 'f908dca1-2a4f-4800-b89a-b84c1f250b91', 'coins_expires_in': 94554, 'isTrans': False, 'user': {'name': '余新平', 'nickname': '老余', 'mobile': '13388788663', 'email': None, 'has_pwd': True, 'kyc_status': 0, 'head_img': '', 'netease_token': '402f08944e60476cf44a3ad173622315', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10569, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+100.0
+维持保证金 0.005
+[2020-06-08 17:31:55.601205] INFO: interface: 限价买涨计算强平价结束
+Traceback (most recent call last):
+  File "C:\Program Files\Python36\lib\site-packages\ddt.py", line 182, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\自动化\deep\test_Case\test_market_position.py", line 169, in test_2_shujdie
+    Strong_parity = price * (1 - 1 / lever + maintenance)
+TypeError: can't multiply sequence by non-int of type 'float'
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='ft9.4' class='none'>
+    <td class='errorCase'><div class='testcase'>test_2_shujdie_2</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft9.4')" >
+        错误</a>
+    <div id='div_ft9.4' class="popup_window">
+        <pre>ft9.4: [2020-06-08 17:31:55.603200] INFO: interface: 限价买涨计算强平价开始
+
+&lt;class 'list'&gt;
+{'retCode': 0, 'retMsg': '登录成功', 'retData': {'uid': 315896, 'token': 'DdJn8WZPWqCxC6qJUCjqVyssbDKbd5XR+r6A7rSnM/99h2lQcqgJAGxv8YGj4g2gpfiLMftRxStNanIMfSJbbg==', 'coins_access_token': 'b519bda5-97c6-49cf-8fc9-29897a223488', 'coins_refresh_token': 'f908dca1-2a4f-4800-b89a-b84c1f250b91', 'coins_expires_in': 94552, 'isTrans': False, 'user': {'name': '余新平', 'nickname': '老余', 'mobile': '13388788663', 'email': None, 'has_pwd': True, 'kyc_status': 0, 'head_img': '', 'netease_token': '402f08944e60476cf44a3ad173622315', 'mykey_account': None, 'roomid': 140669063, 'vip_roomid': 139847256, 'level': 1, 'left': 1000, 'total': 1000, 'chatroom_tag': None, 'coins_id': 10569, 'mykey_id': None, 'open_financial': 0, 'contract_type': 2}}, 'retHtml': ''}
+2
+2
+登录成功
+[2]
+结束
+120.0
+维持保证金 0.005
+[2020-06-08 17:31:57.430605] INFO: interface: 限价买涨计算强平价结束
+Traceback (most recent call last):
+  File "C:\Program Files\Python36\lib\site-packages\ddt.py", line 182, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\自动化\deep\test_Case\test_market_position.py", line 169, in test_2_shujdie
+    Strong_parity = price * (1 - 1 / lever + maintenance)
+TypeError: can't multiply sequence by non-int of type 'float'
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+<tr id='ft9.5' class='none'>
+    <td class='errorCase'><div class='testcase'>test_3_strong</div></td>
+    <td colspan='5' align='center'>
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft9.5')" >
+        错误</a>
+    <div id='div_ft9.5' class="popup_window">
+        <pre>ft9.5: [2020-06-08 17:31:57.431602] INFO: interface: 限价买涨计算强平价开始
+&lt;class 'list'&gt;
+[{'order_id': 'O20200608104355315896181918', 'uid': 315896, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('0.241400000000000000'), 'open_fee': Decimal('0.144800000000000000'), 'close_fee': Decimal('0.144800000000000000'), 'lever': Decimal('80.000000000000000000'), 'bs_flag': 2, 'price': Decimal('0E-18'), 'quantity': Decimal('0.002000000000000000'), 'order_type': 1, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608104355315896912701', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591584235, 'update_time': 1591584235, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}, {'order_id': 'O20200608104650315896419763', 'uid': 315896, 'contract_id': 'BTCUSDT', 'side': 1, 'amount': Decimal('48.280100000000000000'), 'open_fee': Decimal('36.210000000000000000'), 'close_fee': Decimal('36.210000000000000000'), 'lever': Decimal('100.000000000000000000'), 'bs_flag': 1, 'price': Decimal('0E-18'), 'quantity': Decimal('0.500000000000000000'), 'order_type': 1, 'order_status': 2, 'maker_fee_ratio': Decimal('0.004500000000000000'), 'taker_fee_ratio': Decimal('0.007500000000000000'), 'user_order_id': 'T20200608104650315896403860', 'trade_currency': Decimal('0E-18'), 'trade_quantity': Decimal('0E-18'), 'trade_time': 0, 'cancel_quantity': Decimal('0E-18'), 'pl': Decimal('0E-18'), 'create_time': 1591584410, 'update_time': 1591584410, 'amount_difference': Decimal('0E-18'), 'profit': Decimal('0E-18'), 'returned_amount': Decimal('0E-18')}]
+T20200608104355315896912701
+----------------------------------------------------------------------------------------------------
+[Decimal('80.000000000000000000')]
+111 ['T20200608104355315896912701']
+T20200608104650315896403860
+----------------------------------------------------------------------------------------------------
+[Decimal('80.000000000000000000'), Decimal('100.000000000000000000')]
+111 ['T20200608104355315896912701', 'T20200608104650315896403860']
+[2020-06-08 17:31:58.252094] INFO: interface: 限价买涨计算强平价结束
+Traceback (most recent call last):
+  File "D:\自动化\deep\test_Case\test_market_position.py", line 269, in test_3_strong
+    print(plan_order[i]['user_order_id'])
+IndexError: list index out of range
+</pre>
+    </div>
+    <!--css div popup end-->
+    </td>
+</tr>
+
+        <tr id='total_row'>
+            <td>总计</td>
+            <td>27</td>
+            <td>18</td>
+            <td>0</td>
+            <td>9</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+        <div id='ending'>&nbsp;</div>
+        
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('chart'));
+        // 指定图表的配置项和数据
+        var option = {
+            title : {
+                text: '测试执行情况',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            color: ['#95b75d', 'grey', '#b64645'],
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['通过','失败','错误']
+            },
+            series : [
+                {
+                    name: '测试执行情况',
+                    type: 'pie',
+                    radius : '60%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:18, name:'通过'},
+                        {value:0, name:'失败'},
+                        {value:9, name:'错误'}
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    
+    </div>
+</body>
+</html>
