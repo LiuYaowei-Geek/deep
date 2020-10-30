@@ -7,7 +7,7 @@ class db_commit(object):
     '''
     #连接数据库
     def connect(self):
-        self.conn = pymysql.connect(host='103.14.33.145',port=3366,user='root',database = None,password='123456',db='bbj_db',charset='utf8',cursorclass=pymysql.cursors.DictCursor)
+        self.conn = pymysql.connect(host='********',port=**,user='**',database = None,password='**',db='bbj_db',charset='utf8',cursorclass=pymysql.cursors.DictCursor)
         self.cursor = self.conn.cursor()
     '''关闭链接'''
     def close(self):
